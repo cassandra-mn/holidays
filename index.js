@@ -22,7 +22,21 @@ app.get('/holidays', (request, response) => {
             return `<p>${holiday.date} - ${holiday.name}</p>`;
         }).join('')}
     `);
-})
+});
+
+app.get('/is-today-holiday', (request, response) => {
+    const today = new Date();
+    const isHoliday = false;
+    
+    holidays.map(holiday => {
+        if(today.toLocaleDateString() === holiday.date) isHoliday = true;
+    });
+
+    response.send(`
+        <h2>Dia ${today.toLocaleDateString()}</h1>
+        ${isHoliday ? `Sim, hoje é feriado` : 'Não, hoje não é feriado'}
+    `);
+});
 
 app.listen(4000, () => {
     console.log('Deu bom');

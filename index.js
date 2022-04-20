@@ -26,15 +26,15 @@ app.get('/holidays', (request, response) => {
 
 app.get('/is-today-holiday', (request, response) => {
     const today = new Date();
-    const isHoliday = false;
+    const feriado = holidays.map(holiday => {
+        if(today.toLocaleDateString() === holiday.date) {
+            return holiday.name;
+        } 
+    }).join('');
     
-    holidays.map(holiday => {
-        if(today.toLocaleDateString() === holiday.date) isHoliday = true;
-    });
-
     response.send(`
-        <h2>Dia ${today.toLocaleDateString()}</h1>
-        ${isHoliday ? `Sim, hoje é feriado` : 'Não, hoje não é feriado'}
+    <h2>Dia ${today.toLocaleDateString()}</h1>
+    ${feriado !== '' ? `Sim, hoje é ${feriado}` : 'Não, hoje não é feriado'}
     `);
 });
 

@@ -3,7 +3,7 @@ import express from 'express';
 const app = express();
 const holidays = [
     { date: "1/1/2022", name: "Confraternização mundial" },
-    { date: "1/3/2022", name: "Carnaval" },
+    { date: "3/1/2022", name: "Carnaval" },
     { date: "4/17/2022", name: "Páscoa" },
     { date: "4/21/2022", name: "Tiradentes" },
     { date: "5/1/2022", name: "Dia do trabalho" },
@@ -33,8 +33,26 @@ app.get('/is-today-holiday', (request, response) => {
     }).join('');
     
     response.send(`
-    <h2>Dia ${today.toLocaleDateString()}</h1>
-    ${feriado !== '' ? `Sim, hoje é ${feriado}` : 'Não, hoje não é feriado'}
+        <h2>Dia ${today.toLocaleDateString()}</h1>
+        ${feriado !== '' ? `Sim, hoje é ${feriado}` : 'Não, hoje não é feriado'}
+    `);
+});
+
+app.get('/holidays/:idMonth', (request, response) => {
+    const id = request.params.idMonth;
+    const months = ['','Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
+    const holidayMonth = holidays.map(holiday => {
+        const date = new Date(holiday.date);
+        const month = date.getMonth();
+        
+        if (parseInt(id) === month + 1) {
+            return `<p>${holiday.date} - ${holiday.name}</p>`;
+        }
+    }).join('');
+    
+    response.send(`
+        <h1>Feriados ${months[id]}</h1>
+        <p>${holidayMonth}</p>
     `);
 });
 
